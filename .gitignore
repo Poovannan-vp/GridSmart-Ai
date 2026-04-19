@@ -1,0 +1,24 @@
+# Environments
+.env
+.venv
+venv
+ENV/
+
+# Dependencies
+node_modules/
+dist/
+build/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class

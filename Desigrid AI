@@ -1,0 +1,54 @@
+# GridSmart Backend Walkthrough
+
+The initial backend and frontend for GridSmart have been successfully implemented! We have a working React dashboard powered by a FastAPI backend.
+
+## Frontend Implementation
+
+Teammate A has built out the React frontend using **Vite** and **Tailwind CSS v4**.
+
+- **Multi-Page Architecture**: Implemented `react-router-dom` to split the app into three distinct views:
+  - **Front Page (`LandingPage.jsx`)**: The onboarding screen. **Live OTP Integration**: Now features a two-step verification flow. Users receive a 6-digit code via WhatsApp and must verify it before accessing the dashboard.
+  - **Middle Page (`DashboardPage.jsx`)**: The core live dashboard with the Solar Gauge and AI Schedule.
+  - **Back Page (`AnalyticsPage.jsx`)**: The gamification center showing the Scoreboard and impact metrics.
+- **Dynamic Theme**: The UI dynamically switches between a bright, glowing "High Solar" (Gold) state and a dull "Low Solar" (Gray) state.
+- **Global Alerts**: Critical warnings (Slab Jumps, Urgency drops, Ghost Power) appear at the top of the dashboard.
+- **Mock Integration**: The frontend is currently wired to a local `api.js` service that fetches rich mock data, making it incredibly easy to perfect the UI for the hackathon demo.
+
+### Live Dashboard Demo
+Here is a live recording showing the complete flow: onboarding on the Front page, viewing the Middle page dashboard, and navigating to the Back page analytics:
+![GridSmart Routing Demo](C:/Users/Subhiksha/.gemini/antigravity/brain/ef3c4dc4-b34f-49b9-8d84-9bec8c7b2a15/frontend_routing_demo_1776592179674.webp)
+
+## Backend Changes
+
+### Core Infrastructure
+- Set up a Python virtual environment with `fastapi`, `uvicorn`, `requests`, `google-generativeai`, and `twilio`.
+- Created `.env.example` to manage API keys securely.
+- Built `main.py` serving as the entry point with FastAPI.
+
+### Features
+1. **Solar Service (`solar_service.py`)**: Connects to the free Open-Meteo API. It takes latitude and longitude and returns 24 hours of solar radiation and cloud cover forecasts. It also continuously scans the upcoming hour to detect sudden drops in solar irradiance (>40%). If a drop is detected, it generates a proactive **Urgency Alert** (e.g., "⚠️ Incoming clouds...").
+2. **AI Scheduler (`ai_scheduler.py`)**: Uses Google's Gemini 1.5 Flash. It takes the solar forecast, a list of appliances, and local tariffs, and prompts the AI to generate an optimized JSON schedule.
+3. **Notification Service (`notification_service.py`)**: Added based on your feedback! This uses Twilio to send an instant WhatsApp verification/welcome message when a user signs up.
+4. **Gamification & Scoreboard (`user_service.py`)**: Introduced a mock DB (`db.json`) to track user adherence. Following the AI schedule rewards the user with +100 points and updates their total savings in INR. Missing the schedule incurs a -50 point penalty.
+5. **Life-Impact Converter (`impact_service.py`)**: A fun utility to convert abstract energy savings (kWh) into vivid "superhero" metrics like Banyan tree oxygen days, smartphone charges, and petrol car KM avoided.
+6. **Financial Advisor (`advisor_service.py`)**: Monitors the user's monthly grid consumption against state 'Step-Up' tariff slabs. Triggers a 'CRITICAL_GOLD' slab warning if the user is within 10 units of jumping to a higher electricity price bracket.
+7. **Ghost Power Detector (`ghost_power_service.py`)**: Analyzes the user's base load at night. If it detects high consumption while the house should be sleeping, it generates a gamified "Find the power leeches!" report with a checklist of devices to unplug to save ~₹200/month.
+
+### Endpoints
+- `GET /api/solar/forecast?lat={lat}&lon={lon}`
+- `POST /api/schedule/generate` (takes appliances and coordinates)
+- `POST /api/notifications/verify` (takes a phone number)
+- `GET /api/user/profile` (fetches current gamification score and total savings)
+- `POST /api/user/report-usage` (reports appliance start time to update score and savings)
+- `GET /api/impact/convert?kwh={kwh}` (converts energy savings into Life-Impact metrics)
+- `GET /api/advisor/slab-warning?consumption_kwh={kwh}` (checks if user is near a tariff price jump)
+- `GET /api/advisor/ghost-power?current_load_watts={watts}` (detects high base load at night and returns a checklist)
+
+## Validation
+
+- Tested the `api/solar/forecast` endpoint with live coordinates (Chennai) and verified it successfully pulls 24 hours of live radiation data.
+- Tested the notification endpoint, which correctly handles requests and errors gracefully when Twilio keys are missing (as expected for the skeleton).
+
+> [!TIP]
+> The server runs on port `8001` locally.
+> To fully test the AI and WhatsApp features, you will need to add your `GEMINI_API_KEY` and Twilio credentials to a `.env` file!

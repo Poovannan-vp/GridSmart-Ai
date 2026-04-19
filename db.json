@@ -1,0 +1,21 @@
+{
+    "score": 150,
+    "total_savings_inr": 17.0,
+    "history": [
+        {
+            "appliance": "Washing Machine",
+            "followed": true,
+            "savings": 8.5
+        },
+        {
+            "appliance": "Washing Machine",
+            "followed": true,
+            "savings": 8.5
+        },
+        {
+            "appliance": "Geyser",
+            "followed": false,
+            "savings": 0.0
+        }
+    ]
+}
