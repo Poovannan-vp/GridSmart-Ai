@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GridSmart - The Future of Energy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold-primary: #FFD700;
+            --gold-gradient: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            --glass: rgba(0, 0, 0, 0.6);
+        }
+
+        .intro-container {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url('images/title.png') no-repeat center center/cover;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 1;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            padding: 4rem;
+            border-radius: 40px;
+            z-index: 2;
+            max-width: 900px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.1);
+            animation: cardEntrance 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: scale(0.9) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .brand-badge {
+            background: var(--gold-gradient);
+            color: black;
+            padding: 8px 24px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            display: inline-block;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .main-title {
+            font-size: 7rem;
+            font-weight: 800;
+            margin: 0;
+            line-height: 0.9;
+            background: linear-gradient(to bottom, #fff 30%, var(--gold-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+            letter-spacing: -2px;
+        }
+
+        .tagline {
+            font-size: 2.2rem;
+            font-weight: 300;
+            color: #eee;
+            margin-top: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .hero-quote {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--gold-primary);
+            font-size: 1.8rem;
+            margin: 2.5rem 0;
+            opacity: 0.9;
+        }
+
+        .features-row {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+        }
+
+        .feat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feat-icon {
+            font-size: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .feat-text {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #bbb;
+            font-weight: 600;
+        }
+
+        .gemini-power {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            opacity: 0.6;
+            z-index: 2;
+        }
+
+        .gold-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .main-title { font-size: 4rem; }
+            .tagline { font-size: 1.4rem; }
+            .glass-card { padding: 2rem; margin: 1rem; }
+            .features-row { gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="intro-container">
+        <div class="gold-glow" style="top: 10%; left: 10%;"></div>
+        <div class="gold-glow" style="bottom: 10%; right: 10%;"></div>
+
+        <div class="glass-card">
+            <div class="brand-badge">HACKATHON 2026</div>
+            <h1 class="main-title">GridSmart</h1>
+            <p class="tagline">Your AI-Driven Energy Co-Pilot</p>
+            
+            <div class="hero-quote">
+                "The future of energy isn't just green—it's gold."
+            </div>
+
+            <div class="features-row">
+                <div class="feat-item">
+                    <span class="feat-icon">☀️</span>
+                    <span class="feat-text">Solar-Ready</span>
+                </div>
+                <div class="feat-item">
+                    <span class="feat-icon">🤖</span>
+                    <span class="feat-text">Gemini AI</span>
+                </div>
+                <div class="feat-item">
+                    <span class="feat-icon">📉</span>
+                    <span class="feat-text">Cost Optimizer</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="gemini-power">
+            <span>Powered by</span>
+            <img src="https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304df3de0501c527.svg" alt="Gemini" width="24">
+            <strong>Gemini 1.5 Flash</strong>
+        </div>
+    </div>
+</body>
+</html>

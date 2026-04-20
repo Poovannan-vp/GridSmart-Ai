@@ -28,6 +28,7 @@ export default function DashboardPage({ data: initialData, theme: initialTheme }
   
   // User Inputs State
   const [city, setCity] = useState("Chennai");
+  const [systemSize, setSystemSize] = useState(3); // Default 3kW
   const [myAppliances, setMyAppliances] = useState([
     COMMON_APPLIANCES[0],
     COMMON_APPLIANCES[1],
@@ -133,31 +134,58 @@ export default function DashboardPage({ data: initialData, theme: initialTheme }
             </button>
           </div>
           
-          <div className="flex flex-wrap gap-2">
-            {COMMON_APPLIANCES.map((app) => {
-              const isActive = myAppliances.some(a => a.name === app.name);
-              return (
+          <div className="space-y-3">
+            {myAppliances.map((app, idx) => (
+              <div key={idx} className="flex items-center gap-3 bg-slate-950 p-2 rounded-xl border border-slate-800">
+                <span className="flex-1 text-xs text-white font-medium">{app.name}</span>
+                <div className="flex items-center gap-2">
+                  <select 
+                    value={app.preferred_window || "Flexible"}
+                    onChange={(e) => {
+                      const newApps = [...myAppliances];
+                      newApps[idx].preferred_window = e.target.value;
+                      setMyAppliances(newApps);
+                    }}
+                    className="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-[10px] text-emerald-400 font-bold focus:outline-none"
+                  >
+                    <option value="Flexible">Flexible</option>
+                    <option value="Morning">Morning (6-10AM)</option>
+                    <option value="Afternoon">Afternoon (12-4PM)</option>
+                    <option value="Night">Night (10PM-6AM)</option>
+                  </select>
+                  <input 
+                    type="number"
+                    value={app.power_watts}
+                    onChange={(e) => {
+                      const newApps = [...myAppliances];
+                      newApps[idx].power_watts = parseInt(e.target.value) || 0;
+                      setMyAppliances(newApps);
+                    }}
+                    className="w-14 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-[10px] text-amber-500 font-bold focus:outline-none focus:border-amber-500"
+                  />
+                  <span className="text-[10px] text-slate-500 font-bold uppercase">W</span>
+                </div>
+                <button 
+                  onClick={() => setMyAppliances(myAppliances.filter((_, i) => i !== idx))}
+                  className="p-1.5 hover:text-red-500 text-slate-600 transition-colors"
+                >
+                  <Trash2 className="w-3 h-3" />
+                </button>
+              </div>
+            ))}
+            
+            <div className="pt-2 border-t border-slate-800 flex flex-wrap gap-2">
+              <span className="w-full text-[10px] text-slate-500 font-bold uppercase mb-1">Add Common:</span>
+              {COMMON_APPLIANCES.filter(ca => !myAppliances.some(ma => ma.name === ca.name)).map((app) => (
                 <button
                   key={app.name}
-                  onClick={() => {
-                    if (isActive) {
-                      setMyAppliances(myAppliances.filter(a => a.name !== app.name));
-                    } else {
-                      setMyAppliances([...myAppliances, app]);
-                    }
-                  }}
-                  className={clsx(
-                    "px-3 py-1.5 rounded-lg text-xs font-medium border transition-all",
-                    isActive 
-                      ? "bg-amber-500 border-amber-500 text-slate-900" 
-                      : "bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-600"
-                  )}
+                  onClick={() => setMyAppliances([...myAppliances, { ...app }])}
+                  className="px-2 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] text-slate-400 hover:border-slate-600 transition-all"
                 >
-                  {isActive ? <Plus className="w-3 h-3 inline mr-1 rotate-45" /> : <Plus className="w-3 h-3 inline mr-1" />}
-                  {app.name}
+                  + {app.name}
                 </button>
-              );
-            })}
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -212,8 +240,44 @@ export default function DashboardPage({ data: initialData, theme: initialTheme }
           <SolarGauge theme={theme} radiation={currentRadiation} />
         </div>
 
-        {/* Right Column: Original Weather Report */}
-        <div className="flex flex-col h-full">
+        {/* Right Column: Solar Harvest & Weather Report */}
+        <div className="space-y-6">
+          {/* Solar Harvest Breakdown */}
+          <div className="bg-slate-900/80 border border-amber-500/20 rounded-3xl p-6 backdrop-blur-md">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-sm font-black text-amber-500 uppercase tracking-widest">Live Solar Harvest</h2>
+              <select 
+                value={systemSize}
+                onChange={(e) => setSystemSize(parseFloat(e.target.value))}
+                className="bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-[10px] text-amber-500 font-black focus:outline-none"
+              >
+                <option value="1">1kW (Small)</option>
+                <option value="3">3kW (Standard)</option>
+                <option value="5">5kW (Large)</option>
+                <option value="10">10kW (Commercial)</option>
+              </select>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="space-y-1">
+                <p className="text-[10px] text-slate-500 font-bold uppercase">Radiation</p>
+                <p className="text-xl font-black text-white">{currentRadiation}<span className="text-[10px] ml-1">W/m²</span></p>
+              </div>
+              <div className="space-y-1 border-x border-slate-800 px-4">
+                <p className="text-[10px] text-slate-500 font-bold uppercase">Generation</p>
+                <p className="text-xl font-black text-emerald-400">{(currentRadiation * (systemSize / 1000)).toFixed(2)}<span className="text-[10px] ml-1">kW</span></p>
+              </div>
+              <div className="space-y-1 pl-2">
+                <p className="text-[10px] text-slate-500 font-bold uppercase">Value</p>
+                <p className="text-xl font-black text-amber-400">₹{(currentRadiation * (systemSize / 1000) * 8.5).toFixed(2)}<span className="text-[10px] ml-1">/hr</span></p>
+              </div>
+            </div>
+            <div className="mt-4 pt-4 border-t border-slate-800">
+              <p className="text-[9px] text-slate-500 italic">
+                * Simulated for a {systemSize}kW rooftop installation at ₹8.5/unit grid tariff.
+              </p>
+            </div>
+          </div>
+
           <WeatherReportCard weather={data.solar.weather_report} theme={theme} />
         </div>
       </div>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GridSmart - AI Energy Co-Pilot</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="slider-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active" id="slide-1">
+            <div class="slide-content">
+                <div class="badge">Hackathon 2026</div>
+                <h1>GridSmart</h1>
+                <p class="subtitle">Your AI-Driven Energy Co-Pilot</p>
+                <div class="hero-quote">"The future of energy isn't just green—it's gold."</div>
+                <div class="divider" style="margin: 0 auto 30px;"></div>
+                <p class="description">Stop reacting to your electricity bill and start predicting it.</p>
+            </div>
+            <div class="slide-image" style="background-image: url('images/title.png');"></div>
+        </div>
+
+        <!-- Slide 2: The Hook -->
+        <div class="slide" id="slide-2">
+            <div class="slide-content">
+                <h2>The "Why"</h2>
+                <div class="point">
+                    <span class="icon">⚠️</span>
+                    <div>
+                        <h3>The Energy Blind Spot</h3>
+                        <p>Running the dishwasher when it's cloudy? Accidental tariff jumps? Most smart homes are just remote-controlled, not intelligent.</p>
+                    </div>
+                </div>
+                <div class="point">
+                    <span class="icon">💡</span>
+                    <div>
+                        <h3>GridSmart Solution</h3>
+                        <p>Real-time weather data + Gemini-powered scheduling + Behavioral gamification.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-image" style="background-image: url('images/problem_solution.png');"></div>
+        </div>
+
+        <!-- Slide 3: The Experience -->
+        <div class="slide" id="slide-3">
+            <div class="slide-content">
+                <h2>The Frontend Experience</h2>
+                <div class="tech-stack">Vite + Tailwind CSS v4</div>
+                <ul class="features">
+                    <li><strong>Onboarding:</strong> Secure WhatsApp OTP via Twilio.</li>
+                    <li><strong>Dashboard:</strong> Dynamic themes shifting from <span>Solar Gold</span> to <span>Low Gray</span>.</li>
+                    <li><strong>Analytics:</strong> Gamified impact center.</li>
+                </ul>
+            </div>
+            <div class="slide-image" style="background-image: url('images/themes.png');"></div>
+        </div>
+
+        <!-- Slide 4: The Engine -->
+        <div class="slide" id="slide-4">
+            <div class="slide-content">
+                <h2>The Engine (Backend)</h2>
+                <div class="tech-stack">FastAPI + Google Gemini</div>
+                <div class="point">
+                    <span class="icon">☀️</span>
+                    <div>
+                        <h3>Solar Service</h3>
+                        <p>Live 24h radiation forecasts. Proactive alerts on 40% solar drops.</p>
+                    </div>
+                </div>
+                <div class="point">
+                    <span class="icon">🤖</span>
+                    <div>
+                        <h3>Gemini AI Scheduler</h3>
+                        <p>Gemini 1.5 Flash optimizes appliance schedules into actionable JSON.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-image" style="background-image: url('images/scheduler.png');"></div>
+        </div>
+
+        <!-- Slide 5: Secret Sauce -->
+        <div class="slide" id="slide-5">
+            <div class="slide-content">
+                <h2>The Secret Sauce</h2>
+                <div class="card ghost">
+                    <h3>Ghost Power Detector</h3>
+                    <p>Detects "Power Leeches" at night. Save ~₹200/month.</p>
+                </div>
+                <div class="card slab">
+                    <h3>Slab Warning</h3>
+                    <p>Critical Gold Alerts when within 10 units of a tariff jump.</p>
+                </div>
+            </div>
+            <div class="slide-image" style="background-image: url('images/themes.png'); opacity: 0.6;"></div>
+        </div>
+
+        <!-- Slide 6: Vision -->
+        <div class="slide" id="slide-6">
+            <div class="slide-content centered">
+                <h2>The Vision</h2>
+                <p class="impact">"Stop reacting to your bill and start predicting it."</p>
+                <div class="life-converter">
+                    <p><strong>Life-Impact Converter:</strong></p>
+                    <p>Generating oxygen for a Banyan tree, one kWh at a time.</p>
+                </div>
+                <h3 class="closing">The future of energy is Gold.</h3>
+                <div class="thanks">Thank You!</div>
+            </div>
+            <div class="slide-image" style="background-image: url('images/title.png'); filter: brightness(0.4);"></div>
+        </div>
+
+        <div class="controls">
+            <button id="prevBtn">←</button>
+            <div class="dots" id="dotsContainer"></div>
+            <button id="nextBtn">→</button>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const dotsContainer = document.getElementById('dotsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlide = 0;
+
+        // Create dots
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function updateSlides() {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === currentSlide);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        function goToSlide(n) {
+            currentSlide = n;
+            updateSlides();
+        }
+
+        prevBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateSlides();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlides();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextBtn.click();
+            if (e.key === 'ArrowLeft') prevBtn.click();
+        });
+    </script>
+</body>
+</html>
